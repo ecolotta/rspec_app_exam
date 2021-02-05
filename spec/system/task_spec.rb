@@ -56,7 +56,7 @@ RSpec.describe 'Task', type: :system do
 
   describe 'Task編集' do
     context '正常系' do
-      fit 'Taskを編集した場合、一覧画面で編集後の内容が表示されること' do
+      it 'Taskを編集した場合、一覧画面で編集後の内容が表示されること' do
         # FIXME: テストが失敗するので修正してください
         visit edit_project_task_path(project, task)
         fill_in 'Deadline', with: Time.current
@@ -92,13 +92,12 @@ RSpec.describe 'Task', type: :system do
   describe 'Task削除' do
     context '正常系' do
       # FIXME: テストが失敗するので修正してください
-      it 'Taskが削除されること' do
-        project = create(:project)
-        task = create(:task, project_id: project.id, title: 'delete_test')
+      fit 'Taskが削除されること' do
+        task = create(:task)
         visit project_tasks_path(project)
         click_link 'Destroy'
         page.driver.browser.switch_to.alert.accept
-        expect(page).not_to have_content task.title
+        expect(find('tr')).not_to have_content task.title
         expect(Task.count).to eq 0
         expect(current_path).to eq project_tasks_path(project)
       end
